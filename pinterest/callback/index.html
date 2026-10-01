@@ -1,0 +1,42 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>PAZARYOLU · Pinterest Connection</title>
+<style>
+  body{margin:0;background:#FBFAF8;color:#201D1A;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;line-height:1.6}
+  .wrap{max-width:560px;margin:0 auto;padding:3rem 16px}
+  h1{font-size:1.5rem;margin:0 0 .5rem}
+  .ok{color:#1E6E52}.err{color:#B4552D}
+  .box{background:#fff;border:1px solid #E7E3DC;border-radius:12px;padding:1rem 1.2rem;margin:1rem 0;word-break:break-all;font-family:ui-monospace,Menlo,monospace;font-size:.9rem}
+  button{background:#1E6E52;color:#fff;border:0;border-radius:8px;padding:.6rem 1rem;font-size:.95rem;cursor:pointer}
+  p.small{color:#5E5A54;font-size:.85rem}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1 id="title">PAZARYOLU · Pinterest Connection</h1>
+  <p id="msg">Waiting for Pinterest…</p>
+  <div id="codebox" class="box" hidden></div>
+  <button id="copy" hidden>Copy code</button>
+  <p class="small">This page receives the one-time authorization code after you approve the PAZARYOLU app on Pinterest. The code expires in minutes and is useless without the app secret.</p>
+</div>
+<script>
+  var p = new URLSearchParams(location.search);
+  var code = p.get('code'), err = p.get('error');
+  var msg = document.getElementById('msg');
+  if (code) {
+    msg.innerHTML = '<span class="ok">✔ Approved.</span> Copy this code back to Claude:';
+    var box = document.getElementById('codebox'); box.textContent = code; box.hidden = false;
+    var b = document.getElementById('copy'); b.hidden = false;
+    b.onclick = function(){ navigator.clipboard.writeText(code).then(function(){ b.textContent = 'Copied'; }); };
+  } else if (err) {
+    msg.innerHTML = '<span class="err">✖ Connection not approved:</span> ' + err.replace(/[<>&]/g,'');
+  } else {
+    msg.textContent = 'This is the Pinterest OAuth return page for PAZARYOLU. Nothing to do here.';
+  }
+</script>
+</body>
+</html>
